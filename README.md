@@ -10,6 +10,8 @@
 
 </div>
 
+![SecureOps Banner](docs/public/banner.png)
+
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Docker Compose](https://img.shields.io/badge/Docker%20Compose-supported-2496ED?logo=docker&logoColor=white)](docker/docker-compose.yml)
 [![CI](https://github.com/Bitesdust-3/security-platform-public/actions/workflows/ci.yml/badge.svg)](https://github.com/Bitesdust-3/security-platform-public/actions/workflows/ci.yml)
