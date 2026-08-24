@@ -173,21 +173,6 @@ tests/          后端测试代码
 
 扫描功能仅面向用户明确授权的本地实验环境、单个目标或实验网段。项目不开发攻击真实目标、恶意代码或不必要的危险功能。
 
-## 开发阶段
-
-1. 项目调研和技术选型（已完成）
-2. 项目初始化（目录已创建）
-3. 后端基础框架
-4. 数据库设计
-5. 用户认证系统
-6. 资产管理模块
-7. 安全扫描模块
-8. 漏洞管理模块
-9. 风险分析模块
-10. 前端管理后台
-11. Docker 部署
-12. 项目优化和部署验证
-
 后端 API 说明见 [docs/public/api.md](docs/public/api.md)，贡献方式见 [CONTRIBUTING.md](CONTRIBUTING.md)，版本记录见 [CHANGELOG.md](CHANGELOG.md)。
 
 测试说明见 [docs/public/testing.md](docs/public/testing.md)。默认单元测试使用 SQLite 内存数据库；MySQL 迁移测试和浏览器测试均使用独立测试环境，避免影响开发数据。
