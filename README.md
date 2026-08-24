@@ -33,7 +33,7 @@ SecureOps 将资产登记、授权扫描、漏洞处置、CVE 情报、风险分
 - HTML/PDF 安全报告生成
 - 关键操作审计日志和安全限流
 
-## 技术架构
+## 技术栈 Tech Stack
 
 | 层次 | 技术 |
 | --- | --- |
@@ -44,7 +44,7 @@ SecureOps 将资产登记、授权扫描、漏洞处置、CVE 情报、风险分
 | 扫描器 | 授权实验环境 Nmap |
 | 部署 | Docker、Docker Compose、Nginx |
 
-## 系统架构图
+## 系统架构 Architecture
 
 ```mermaid
 flowchart LR
@@ -57,7 +57,7 @@ flowchart LR
   W --> N[Nmap 授权扫描]
 ```
 
-## 项目截图
+## Screenshots / 项目截图
 
 真实系统截图位于 `docs/public/screenshots/`：
 
@@ -72,7 +72,7 @@ flowchart LR
 | 审计日志 | [`05-audit.png`](docs/public/screenshots/05-audit.png) |
 | 安全报告 | [`06-reports.png`](docs/public/screenshots/06-reports.png) |
 
-## Demo
+## Demo 展示
 
 本项目 Demo 基于独立 E2E 环境和授权测试目标 `127.0.0.1` 录制，展示的均为真实系统功能和真实 API 数据。
 
@@ -107,7 +107,11 @@ flowchart LR
 - [ ] 更完整的多租户授权范围管理
 - [ ] 可插拔的合规检查规则
 
-## Docker 部署
+## 部署 Deployment
+
+推荐使用 Docker Compose 启动完整服务。详细说明见 [部署文档](docs/public/deployment.md)。
+
+### Docker 部署
 
 开发/演示环境复制 `.env.example` 为 `.env`；生产模拟环境复制 `.env.production.example` 为 `.env.production`。两者都必须设置强密码和随机 JWT 密钥，然后运行：
 
@@ -125,7 +129,7 @@ docker compose -f docker/docker-compose.yml --env-file .env.production up --buil
 
 前端默认访问地址为 `http://localhost:8080`。后端入口会执行数据库迁移；首次部署请查看 [部署说明](docs/public/deployment.md)。
 
-## 一键部署
+### 一键部署
 
 准备 `.env`：
 
