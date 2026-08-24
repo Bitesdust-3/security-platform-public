@@ -56,6 +56,25 @@ flowchart LR
 | 审计日志 | [`05-audit.png`](docs/public/screenshots/05-audit.png) |
 | 安全报告 | [`06-reports.png`](docs/public/screenshots/06-reports.png) |
 
+## Demo
+
+本项目 Demo 基于独立 E2E 环境和授权测试目标 `127.0.0.1` 录制，展示的均为真实系统功能和真实 API 数据。
+
+- [观看或下载真实 Demo 录屏](docs/public/demo-secureops.webm)
+- [查看完整演示流程](docs/public/demo-flow.md)
+
+录屏涵盖登录、风险总览、资产管理、扫描任务、漏洞管理和安全报告。GitHub 对 WebM 的页面内播放支持因客户端而异，因此这里使用文件链接以保证兼容性。
+
+### Demo关键页面
+
+| 功能 | 截图 |
+| --- | --- |
+| 风险总览 | [`08-demo-dashboard.png`](docs/public/screenshots/08-demo-dashboard.png) |
+| 资产管理 | [`09-demo-assets.png`](docs/public/screenshots/09-demo-assets.png) |
+| 扫描完成 | [`12-demo-scans-completed.png`](docs/public/screenshots/12-demo-scans-completed.png) |
+| 漏洞管理 | [`14-demo-vulnerabilities.png`](docs/public/screenshots/14-demo-vulnerabilities.png) |
+| 安全报告 | [`15-demo-reports.png`](docs/public/screenshots/15-demo-reports.png) |
+
 ## 当前状态
 
 当前版本为 `0.1.0` MVP 展示版本，已完成认证、资产、授权扫描、漏洞、CVE、风险、自动化巡检、报告、审计、前端和 Docker 编排。真实 Nmap 扫描仍必须在明确授权的实验环境中执行。

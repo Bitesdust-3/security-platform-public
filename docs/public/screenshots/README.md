@@ -13,6 +13,24 @@
 
 当前已生成以上六张真实E2E运行截图，来源为独立 `secureops-e2e` 测试环境；未使用设计稿或模拟图片。
 
+## Demo验收素材
+
+以下截图来自同一独立 E2E 环境，用于展示实际操作状态：
+
+| 文件 | 内容 |
+| --- | --- |
+| `07-demo-login.png` | Demo 登录页 |
+| `08-demo-dashboard.png` | 登录后的 Dashboard |
+| `09-demo-assets.png` | 资产列表和详情入口 |
+| `10-demo-scans-pending.png` | 扫描任务等待执行 |
+| `11-demo-scans-running.png` | Celery 执行中的扫描任务 |
+| `12-demo-scans-completed.png` | 扫描完成状态 |
+| `13-demo-risk-dashboard.png` | 风险统计和高风险资产排行 |
+| `14-demo-vulnerabilities.png` | CVE、CVSS 和严重等级 |
+| `15-demo-reports.png` | 安全报告列表和 PDF 入口 |
+
+素材使用独立测试数据库、Redis 和授权目标 `127.0.0.1` 生成，未使用模拟图片或真实生产数据。
+
 截图前准备：
 
 - 使用本地演示账号，不展示密码、JWT、数据库地址或NVD密钥。
