@@ -22,7 +22,7 @@ SecureOps 将资产登记、授权扫描、漏洞处置、CVE 情报、风险分
 
 > 适用范围：本地或隔离网络中的授权安全实验。请勿扫描未获授权的目标。
 
-**快速入口：** [真实 Demo](docs/public/demo-secureops.webm) · [演示流程](docs/public/demo-flow.md) · [快速部署](#一键部署) · [完整文档](docs/public/)
+**快速入口：** [真实 Demo](docs/demo-secureops.webm) · [演示流程](docs/public/demo-flow.md) · [快速部署](#一键部署) · [完整文档](docs/public/)
 
 ## 功能特点
 
@@ -61,24 +61,24 @@ flowchart LR
 
 ## Screenshots / 项目截图
 
-真实系统截图位于 `docs/public/screenshots/`：
+真实系统截图位于 `docs/screenshots/`：
 
 | 页面 | 截图 |
 | --- | --- |
-| 登录页 | [`01-login.png`](docs/public/screenshots/01-login.png) |
-| Dashboard | [`02-dashboard.png`](docs/public/screenshots/02-dashboard.png) |
-| 资产管理 | [`03-assets.png`](docs/public/screenshots/03-assets.png) |
-| 扫描任务 | [`12-demo-scans-completed.png`](docs/public/screenshots/12-demo-scans-completed.png) |
-| 漏洞管理 | [`04-vulnerabilities.png`](docs/public/screenshots/04-vulnerabilities.png) |
-| 风险分析 | [`13-demo-risk-dashboard.png`](docs/public/screenshots/13-demo-risk-dashboard.png) |
+| 登录页 | [`01-login.png`](docs/screenshots/01-login.png) |
+| Dashboard | [`02-dashboard.png`](docs/screenshots/02-dashboard.png) |
+| 资产管理 | [`03-assets.png`](docs/screenshots/03-assets.png) |
+| 扫描任务 | [`04-scan.png`](docs/screenshots/04-scan.png) |
+| 漏洞管理 | [`05-vulnerability.png`](docs/screenshots/05-vulnerability.png) |
+| 风险分析 | [`06-risk.png`](docs/screenshots/06-risk.png) |
 | 审计日志 | [`05-audit.png`](docs/public/screenshots/05-audit.png) |
-| 安全报告 | [`06-reports.png`](docs/public/screenshots/06-reports.png) |
+| 安全报告 | [`07-report.png`](docs/screenshots/07-report.png) |
 
 ## Demo 展示
 
 本项目 Demo 基于独立 E2E 环境和授权测试目标 `127.0.0.1` 录制，展示的均为真实系统功能和真实 API 数据。
 
-- [观看或下载真实 Demo 录屏](docs/public/demo-secureops.webm)
+- [观看或下载真实 Demo 录屏](docs/demo-secureops.webm)
 - [查看完整演示流程](docs/public/demo-flow.md)
 
 ![SecureOps Demo预览](docs/public/demo.gif)
