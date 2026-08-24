@@ -14,6 +14,8 @@
 [![Docker Compose](https://img.shields.io/badge/Docker%20Compose-supported-2496ED?logo=docker&logoColor=white)](docker/docker-compose.yml)
 [![CI](https://github.com/Bitesdust-3/security-platform-public/actions/workflows/ci.yml/badge.svg)](https://github.com/Bitesdust-3/security-platform-public/actions/workflows/ci.yml)
 
+## 项目介绍
+
 SecureOps 将资产登记、授权扫描、漏洞处置、CVE 情报、风险分析、自动化巡检、安全报告和审计记录串成一个可运行的安全运营闭环。项目适合在本地授权实验环境中学习和演示，不是面向公网生产环境的完整 SIEM 或漏洞利用平台。
 
 > 适用范围：本地或隔离网络中的授权安全实验。请勿扫描未获授权的目标。
@@ -64,7 +66,9 @@ flowchart LR
 | 登录页 | [`01-login.png`](docs/public/screenshots/01-login.png) |
 | Dashboard | [`02-dashboard.png`](docs/public/screenshots/02-dashboard.png) |
 | 资产管理 | [`03-assets.png`](docs/public/screenshots/03-assets.png) |
+| 扫描任务 | [`12-demo-scans-completed.png`](docs/public/screenshots/12-demo-scans-completed.png) |
 | 漏洞管理 | [`04-vulnerabilities.png`](docs/public/screenshots/04-vulnerabilities.png) |
+| 风险分析 | [`13-demo-risk-dashboard.png`](docs/public/screenshots/13-demo-risk-dashboard.png) |
 | 审计日志 | [`05-audit.png`](docs/public/screenshots/05-audit.png) |
 | 安全报告 | [`06-reports.png`](docs/public/screenshots/06-reports.png) |
 
