@@ -2,8 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Docker](https://img.shields.io/badge/docker-compose-部署-2496ED.svg)](docker/docker-compose.yml)
-
-<!-- GitHub CI badge需在仓库确定OWNER/REPO后替换为实际Actions地址。 -->
+[![CI](https://github.com/Bitesdust-3/security-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/Bitesdust-3/security-platform/actions/workflows/ci.yml)
 
 SecureOps 是一个面向授权实验环境的轻量级企业安全运营平台。
 
@@ -60,6 +59,16 @@ flowchart LR
 ## 当前状态
 
 当前版本为 `0.1.0` MVP 展示版本，已完成认证、资产、授权扫描、漏洞、CVE、风险、自动化巡检、报告、审计、前端和 Docker 编排。真实 Nmap 扫描仍必须在明确授权的实验环境中执行。
+
+## Roadmap
+
+- [x] 认证、资产、扫描、漏洞和风险闭环
+- [x] Redis + Celery 自动化巡检
+- [x] CVE 情报同步和安全报告导出
+- [x] Docker Compose 部署与 CI 检查
+- [ ] HTTPS 反向代理和生产环境密钥托管示例
+- [ ] 更完整的多租户授权范围管理
+- [ ] 可插拔的合规检查规则
 
 ## Docker 部署
 
