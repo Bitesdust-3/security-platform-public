@@ -1,0 +1,31 @@
+from app.models.security import (
+    Asset,
+    AssetService,
+    AssetVulnerability,
+    AuditLog,
+    Role,
+    ScanTask,
+    ScanSchedule,
+    ScanResult,
+    User,
+    UserRole,
+    Vulnerability,
+    CveIntelligence,
+    SecurityReport,
+)
+
+__all__ = [
+    "Asset",
+    "AssetService",
+    "AssetVulnerability",
+    "AuditLog",
+    "Role",
+    "ScanTask",
+    "ScanSchedule",
+    "ScanResult",
+    "User",
+    "UserRole",
+    "Vulnerability",
+    "CveIntelligence",
+    "SecurityReport",
+]
