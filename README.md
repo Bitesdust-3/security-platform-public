@@ -5,7 +5,7 @@
 
 <!-- GitHub CI badge需在仓库确定OWNER/REPO后替换为实际Actions地址。 -->
 
-面向信息安全专业学习、毕业论文、求职简历和面试展示的轻量级安全运营平台。
+SecureOps 是一个面向授权实验环境的轻量级企业安全运营平台。
 
 SecureOps 将资产登记、授权扫描、漏洞处置、CVE 情报、风险分析、自动化巡检、安全报告和审计记录串成一个可运行的安全运营闭环。项目适合在本地授权实验环境中学习和演示，不是面向公网生产环境的完整 SIEM 或漏洞利用平台。
 
@@ -46,15 +46,16 @@ flowchart LR
 
 ## 项目截图
 
-建议将真实截图放入 `docs/screenshots/`，推荐文件名：
+真实系统截图位于 `docs/public/screenshots/`：
 
 | 页面 | 截图 |
 | --- | --- |
-| Dashboard | `docs/screenshots/dashboard.png` |
-| 资产管理 | `docs/screenshots/assets.png` |
-| 漏洞管理 | `docs/screenshots/vulnerabilities.png` |
-| 风险分析 | `docs/screenshots/risk.png` |
-| 安全报告 | `docs/screenshots/reports.png` |
+| 登录页 | [`01-login.png`](docs/public/screenshots/01-login.png) |
+| Dashboard | [`02-dashboard.png`](docs/public/screenshots/02-dashboard.png) |
+| 资产管理 | [`03-assets.png`](docs/public/screenshots/03-assets.png) |
+| 漏洞管理 | [`04-vulnerabilities.png`](docs/public/screenshots/04-vulnerabilities.png) |
+| 审计日志 | [`05-audit.png`](docs/public/screenshots/05-audit.png) |
+| 安全报告 | [`06-reports.png`](docs/public/screenshots/06-reports.png) |
 
 ## 当前状态
 
@@ -76,7 +77,7 @@ cp .env.production.example .env.production
 docker compose -f docker/docker-compose.yml --env-file .env.production up --build -d
 ```
 
-前端默认访问地址为 `http://localhost:8080`。后端入口会执行数据库迁移；首次部署请查看 [部署说明](docs/deployment.md)。
+前端默认访问地址为 `http://localhost:8080`。后端入口会执行数据库迁移；首次部署请查看 [部署说明](docs/public/deployment.md)。
 
 ## 一键部署
 
@@ -135,13 +136,11 @@ tests/          后端测试代码
 9. 风险分析模块
 10. 前端管理后台
 11. Docker 部署
-12. 项目优化和论文资料整理
+12. 项目优化和部署验证
 
-详细开发规则见 [AGENTS.md](AGENTS.md)。
+后端 API 说明见 [docs/public/api.md](docs/public/api.md)，贡献方式见 [CONTRIBUTING.md](CONTRIBUTING.md)，版本记录见 [CHANGELOG.md](CHANGELOG.md)。
 
-后端 API 说明见 [docs/api.md](docs/api.md)，开发记录见 [docs/development-log.md](docs/development-log.md)。演示脚本见 [docs/demo.md](docs/demo.md)，贡献方式见 [CONTRIBUTING.md](CONTRIBUTING.md)，版本记录见 [CHANGELOG.md](CHANGELOG.md)。
-
-测试说明见 [docs/testing.md](docs/testing.md)。默认单元测试使用SQLite内存数据库；MySQL迁移测试和浏览器测试均使用独立测试环境，避免影响开发数据。
+测试说明见 [docs/public/testing.md](docs/public/testing.md)。默认单元测试使用 SQLite 内存数据库；MySQL 迁移测试和浏览器测试均使用独立测试环境，避免影响开发数据。
 
 ## 后端基础环境
 
@@ -292,16 +291,4 @@ CVE 情报模块使用 NVD API 2.0 作为主数据源，独立保存于 `cve_int
 
 报告表由 Alembic 迁移 `c3d4e5f6a7b8` 创建。PDF 使用 WeasyPrint 生成；Docker 环境如需 PDF 导出，应安装其系统字体和 Pango/Cairo 运行库。
 
-架构、安全设计、部署、测试、论文提纲、简历说明和已知限制见 `docs/` 目录。
-
-## 论文与展示资料
-
-- [系统架构设计](docs/architecture.md)
-- [数据库设计](docs/database.md)
-- [安全设计说明](docs/security-design.md)
-- [部署说明](docs/deployment.md)
-- [API说明](docs/api.md)
-- [用户使用手册](docs/user-manual.md)
-- [面试展示提纲](docs/interview.md)
-
-演示截图建议保存到 `docs/screenshots/`，测试账号仅用于本地演示，部署前必须修改密码。
+架构、安全设计、部署、测试和用户手册见 [`docs/public/`](docs/public/) 目录。测试账号仅用于本地演示，部署前必须修改密码。

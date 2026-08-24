@@ -31,3 +31,7 @@ frontend/coverage/
 .DS_Store
 .idea/
 .vscode/
+
+# Local-only project governance and personal materials
+AGENTS.md
+docs/private/
