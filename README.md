@@ -1,12 +1,24 @@
-# 企业安全运营平台（简化版）
+<div align="center">
+
+# SecureOps
+
+### 轻量级企业安全运营平台
+
+`SOC` · `Asset Management` · `Vulnerability Management` · `Risk Analysis`
+
+面向授权实验环境的可运行安全运营闭环，帮助你登记资产、执行安全扫描、管理漏洞并解释风险。
+
+</div>
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Docker Compose](https://img.shields.io/badge/Docker%20Compose-supported-2496ED?logo=docker&logoColor=white)](docker/docker-compose.yml)
 [![CI](https://github.com/Bitesdust-3/security-platform-public/actions/workflows/ci.yml/badge.svg)](https://github.com/Bitesdust-3/security-platform-public/actions/workflows/ci.yml)
 
-SecureOps 是一个面向授权实验环境的轻量级企业安全运营平台。
-
 SecureOps 将资产登记、授权扫描、漏洞处置、CVE 情报、风险分析、自动化巡检、安全报告和审计记录串成一个可运行的安全运营闭环。项目适合在本地授权实验环境中学习和演示，不是面向公网生产环境的完整 SIEM 或漏洞利用平台。
+
+> 适用范围：本地或隔离网络中的授权安全实验。请勿扫描未获授权的目标。
+
+**快速入口：** [真实 Demo](docs/public/demo-secureops.webm) · [演示流程](docs/public/demo-flow.md) · [快速部署](#一键部署) · [完整文档](docs/public/)
 
 ## 功能特点
 
@@ -62,6 +74,8 @@ flowchart LR
 
 - [观看或下载真实 Demo 录屏](docs/public/demo-secureops.webm)
 - [查看完整演示流程](docs/public/demo-flow.md)
+
+![SecureOps Demo预览](docs/public/demo.gif)
 
 录屏涵盖登录、风险总览、资产管理、扫描任务、漏洞管理和安全报告。GitHub 对 WebM 的页面内播放支持因客户端而异，因此这里使用文件链接以保证兼容性。
 
