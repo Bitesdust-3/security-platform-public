@@ -1,0 +1,7 @@
+<template><div><div class="page-title"><div><div class="eyebrow">ACTIVITY TRAIL</div><h2>审计日志</h2></div><el-button @click="load">刷新</el-button></div><el-table v-loading="loading" :data="logs" class="section-card"><el-table-column prop="user_id" label="操作人ID" width="110" /><el-table-column prop="action" label="操作类型" width="120" /><el-table-column prop="created_at" label="时间" width="190" /><el-table-column prop="resource" label="资源" width="140" /><el-table-column prop="ip_address" label="来源 IP" width="150" /><el-table-column prop="description" label="内容" /></el-table><el-empty v-if="!loading && !logs.length" description="暂无审计记录" /><el-pagination v-if="total" class="section-card" layout="prev, pager, next" :page-size="pageSize" :total="total" v-model:current-page="page" @current-change="load" /></div></template>
+<script setup lang="ts">
+import { onMounted, ref } from "vue"; import client from "../api/client";
+interface Log { id:number; user_id:number|null; action:string; resource:string|null; ip_address:string|null; description:string|null; created_at:string; }
+const logs=ref<Log[]>([]), total=ref(0), page=ref(1), pageSize=ref(10), loading=ref(false);
+const load=async()=>{loading.value=true;try{const r=(await client.get("/audit/logs",{params:{page:page.value,page_size:pageSize.value}})).data;logs.value=r.data;total.value=r.total;}catch{logs.value=[];}finally{loading.value=false;}};onMounted(load);
+</script>

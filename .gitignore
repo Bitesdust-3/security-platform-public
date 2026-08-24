@@ -1,0 +1,37 @@
+# Local environment configuration. Keep documented templates versioned.
+.env*
+!.env.example
+!.env.production.example
+!backend/.env.example
+
+# Python runtime, test and coverage artifacts
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local databases and application logs
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+logs/
+
+# Frontend dependencies, build output and browser-test artifacts
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/test-results/
+frontend/playwright-report/
+frontend/coverage/
+
+# Editor and operating-system generated files
+.DS_Store
+.idea/
+.vscode/
+
+# Local-only project governance and personal materials
+AGENTS.md
+docs/private/

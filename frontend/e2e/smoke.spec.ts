@@ -1,0 +1,43 @@
+import { test, expect } from "@playwright/test";
+
+const username = process.env.E2E_USERNAME;
+const password = process.env.E2E_PASSWORD;
+
+test("authenticated SOC smoke flow", async ({ page }) => {
+  test.skip(!username || !password, "set E2E_USERNAME and E2E_PASSWORD for an authorized test account");
+  await page.goto("/login");
+  await page.getByPlaceholder("用户名").fill(username!);
+  await page.getByPlaceholder("密码").fill(password!);
+  await page.getByRole("button", { name: "登录" }).click();
+  await expect(page).toHaveURL(/dashboard/);
+  await expect(page.getByText("安全运营指挥中心")).toBeVisible();
+  await page.goto("/assets");
+  await expect(page).toHaveURL(/assets/);
+  await expect(page.getByText("demo-web-01").first()).toBeVisible();
+  await page.goto("/scans");
+  await page.getByRole("button", { name: "创建扫描" }).click();
+  const scanDialog = page.getByRole("dialog");
+  const scanInputs = scanDialog.locator("input");
+  await scanInputs.nth(0).fill("E2E localhost scan");
+  await scanInputs.nth(1).fill("127.0.0.1");
+  await scanDialog.getByRole("button", { name: "创建", exact: true }).click();
+  await expect(page.getByText("E2E localhost scan").first()).toBeVisible();
+  await page.getByRole("row").filter({ hasText: "E2E localhost scan" }).last().getByRole("button", { name: "启动" }).click();
+  await expect(page.getByRole("heading", { name: "扫描任务" })).toBeVisible();
+  await page.waitForTimeout(3_000);
+  await page.getByRole("button", { name: "详情" }).first().click();
+  await expect(page.getByRole("cell", { name: /发现|暂无结果/ }).first()).toBeVisible();
+  await page.goto("/vulnerabilities");
+  await expect(page).toHaveURL(/vulnerabilities/);
+  await expect(page.getByText("演示严重漏洞")).toBeVisible();
+  await page.goto("/dashboard");
+  await expect(page.getByText("高风险资产排行")).toBeVisible();
+  await page.goto("/reports");
+  await expect(page).toHaveURL(/reports/);
+  await page.getByRole("button", { name: "生成报告" }).click();
+  await expect(page.getByText(/安全运营报告/)).toBeVisible();
+  const downloadPromise = page.waitForEvent("download");
+  await page.getByRole("button", { name: "PDF" }).first().click();
+  const download = await downloadPromise;
+  expect(download.suggestedFilename()).toMatch(/security-report-\d+\.pdf/);
+});

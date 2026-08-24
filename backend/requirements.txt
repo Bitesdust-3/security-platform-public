@@ -1,0 +1,16 @@
+fastapi>=0.115,<1.0
+python-dotenv>=1.0,<2.0
+pydantic-settings>=2.6,<3.0
+uvicorn[standard]>=0.34,<1.0
+pytest>=8.0,<9.0
+httpx>=0.27,<1.0
+SQLAlchemy>=2.0,<3.0
+Alembic>=1.14,<2.0
+PyMySQL>=1.1,<2.0
+PyJWT>=2.9,<3.0
+bcrypt>=4.0,<5.0
+celery[redis]>=5.4,<6.0
+croniter>=3.0,<7.0
+requests>=2.32,<3.0
+jinja2>=3.1,<4.0
+weasyprint>=62,<70
