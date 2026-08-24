@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Docker](https://img.shields.io/badge/docker-compose-部署-2496ED.svg)](docker/docker-compose.yml)
-[![CI](https://github.com/Bitesdust-3/security-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/Bitesdust-3/security-platform/actions/workflows/ci.yml)
+[![CI](https://github.com/Bitesdust-3/security-platform-public/actions/workflows/ci.yml/badge.svg)](https://github.com/Bitesdust-3/security-platform-public/actions/workflows/ci.yml)
 
 SecureOps 是一个面向授权实验环境的轻量级企业安全运营平台。
 
