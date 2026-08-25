@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="docs/public/banner.png" alt="SecureOps Enterprise Security Operations Platform" width="100%" />
+
 # SecureOps
 
 ### 轻量级企业安全运营平台
@@ -62,20 +64,20 @@ flowchart LR
 
 | 页面 | 截图 |
 | --- | --- |
-| 登录页 | [`01-login.png`](docs/screenshots/01-login.png) |
-| Dashboard | [`02-dashboard.png`](docs/screenshots/02-dashboard.png) |
-| 资产管理 | [`03-assets.png`](docs/screenshots/03-assets.png) |
+| 登录页 | [`07-demo-login.png`](docs/screenshots/07-demo-login.png) |
+| Dashboard | [`08-demo-dashboard.png`](docs/screenshots/08-demo-dashboard.png) |
+| 资产管理 | [`09-demo-assets.png`](docs/screenshots/09-demo-assets.png) |
 | 扫描任务 | [`12-demo-scans-completed.png`](docs/screenshots/12-demo-scans-completed.png) |
-| 漏洞管理 | [`04-vulnerabilities.png`](docs/screenshots/04-vulnerabilities.png) |
+| 漏洞管理 | [`14-demo-vulnerabilities.png`](docs/screenshots/14-demo-vulnerabilities.png) |
 | 风险分析 | [`13-demo-risk-dashboard.png`](docs/screenshots/13-demo-risk-dashboard.png) |
-| 安全报告 | [`06-reports.png`](docs/screenshots/06-reports.png) |
+| 安全报告 | [`15-demo-reports.png`](docs/screenshots/15-demo-reports.png) |
 
 ## Demo 展示
 
 Demo 来自独立 E2E 环境和授权测试目标 `127.0.0.1`，展示真实系统和真实 API 数据。
 
 - [观看或下载 Demo 录屏](docs/demo-secureops.webm)
-- [查看演示流程](docs/demo-flow.md)
+- [Demo Usage](docs/public/demo-flow.md)
 
 ## 当前状态
 
@@ -158,7 +160,7 @@ tests/          后端测试代码
 11. Docker 部署
 12. 项目优化和部署验证
 
-公开 API、部署、安全设计和使用说明见 [`docs/public/`](docs/public/)。演示脚本见 [docs/demo.md](docs/demo.md)，贡献方式见 [CONTRIBUTING.md](CONTRIBUTING.md)，版本记录见 [CHANGELOG.md](CHANGELOG.md)。
+公开 API、部署、安全设计和使用说明见 [`docs/public/`](docs/public/)。Demo流程见 [Demo Usage](docs/public/demo-flow.md)，贡献方式见 [CONTRIBUTING.md](CONTRIBUTING.md)，版本记录见 [CHANGELOG.md](CHANGELOG.md)。
 
 默认单元测试使用 SQLite 内存数据库；MySQL 迁移测试和浏览器测试使用独立测试环境，避免影响开发数据。
 
