@@ -9,7 +9,7 @@
 - `fix/<name>`：缺陷修复时使用，例如 `fix/risk-trend-timezone`。
 - `docs/<name>`：仅修改文档时使用，例如 `docs/deployment-guide`。
 
-个人开发时，应先从最新 `main` 创建功能分支；验证通过后再合并回 `main`。
+开发时，应先从最新 `main` 创建功能分支；验证通过后再合并回 `main`。
 
 ## 日常开发流程
 
