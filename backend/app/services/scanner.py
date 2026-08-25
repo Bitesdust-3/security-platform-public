@@ -76,5 +76,12 @@ def parse_nmap_xml(path: Path) -> list[DiscoveredService]:
             if state is None or state.attrib.get("state") != "open":
                 continue
             service = port.find("service")
-            discovered.append(DiscoveredService(ip_address, hostname, int(port.attrib["portid"]), port.attrib.get("protocol", "tcp"), service.attrib.get("name") if service is not None else None, service.attrib.get("product") if service is not None else None))
+            if service is not None:
+                name = service.attrib.get("product") or service.attrib.get("name")
+                version = service.attrib.get("version") or service.attrib.get("extrainfo")
+                # Nmap exposes product and version as separate XML attributes.
+                # Keep both so downstream CVE matching has an actual version.
+            else:
+                name, version = None, None
+            discovered.append(DiscoveredService(ip_address, hostname, int(port.attrib["portid"]), port.attrib.get("protocol", "tcp"), name, version))
     return discovered

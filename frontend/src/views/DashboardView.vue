@@ -24,6 +24,7 @@
 </template>
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref } from "vue";
+import { ElMessage } from "element-plus";
 import { use } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
 import { PieChart, LineChart } from "echarts/charts";
@@ -115,6 +116,6 @@ onMounted(async () => {
             },
           ],
         });
-  } catch { /* 保持空状态 */ } finally { loading.value = false; }
+  } catch { ElMessage.error("Dashboard 数据加载失败，请检查后端服务"); } finally { loading.value = false; }
 });
 </script>

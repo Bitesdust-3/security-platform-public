@@ -6,8 +6,9 @@ from croniter import croniter
 
 from app.celery_app import celery_app
 from app.database import SessionLocal
-from app.models import Asset, AssetService, CveIntelligence, ScanResult, ScanSchedule, ScanTask, Vulnerability
+from app.models import ScanSchedule, ScanTask
 from app.services.scanner import nmap_available, run_nmap
+from app.services.scan_result_processor import process_scan_results
 
 
 def _execute_scan(db, scan_task: ScanTask) -> None:
@@ -18,25 +19,15 @@ def _execute_scan(db, scan_task: ScanTask) -> None:
     db.commit()
     discovered = run_nmap(scan_task.target)
     now = datetime.now(timezone.utc)
-    for item in discovered:
-        asset = db.scalar(select(Asset).where(Asset.ip_address == item.ip_address))
-        if asset is None:
-            asset = Asset(asset_name=item.hostname or item.ip_address, asset_type="server", ip_address=item.ip_address, hostname=item.hostname, status="active")
-            db.add(asset)
-            db.flush()
-        service = db.scalar(select(AssetService).where(AssetService.asset_id == asset.id, AssetService.port == item.port, AssetService.protocol == item.protocol))
-        if service is None:
-            db.add(AssetService(asset_id=asset.id, port=item.port, protocol=item.protocol, service_name=item.service_name, service_version=item.service_version, discovered_at=now))
-        db.add(ScanResult(scan_task_id=scan_task.id, asset_id=asset.id, result_type="service", normalized_data=f"{item.ip_address}:{item.port}/{item.protocol}"))
-        # Conservative high-confidence candidate matching: require both product and version in NVD raw data.
-        if item.service_name and item.service_version:
-            candidates = db.scalars(select(CveIntelligence).where(CveIntelligence.raw_data.like(f"%{item.service_name}%"), CveIntelligence.raw_data.like(f"%{item.service_version}%")).limit(10)).all()
-            for cve in candidates:
-                exists = db.scalar(select(Vulnerability).where(Vulnerability.cve_id == cve.cve_id, Vulnerability.asset_id == asset.id))
-                if exists is None:
-                    db.add(Vulnerability(title=cve.title or cve.cve_id, cve_id=cve.cve_id, description=cve.description, severity=cve.severity, cvss_score=cve.cvss_score, status="open", asset_id=asset.id, scan_task_id=scan_task.id, source="nvd-possible", remediation="请核实版本范围并升级到厂商安全版本"))
+    summary = process_scan_results(db, scan_task, discovered)
     scan_task.status = "completed"
-    scan_task.result_summary = f"发现 {len(discovered)} 条开放服务"
+    scan_task.result_summary = (
+        f"发现 {summary['discovered_services']} 条开放服务，"
+        f"保存 {summary['saved_results']} 条结果，"
+        f"匹配 {summary['matched_cves']} 条CVE，"
+        f"生成 {summary['created_vulnerabilities']} 条漏洞"
+        + (f"，处理警告 {summary['processing_warnings']} 条" if summary["processing_warnings"] else "")
+    )
     scan_task.finished_at = now
     db.commit()
 

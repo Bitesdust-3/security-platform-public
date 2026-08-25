@@ -28,6 +28,10 @@ def list_assets(db: DbSession, _: CurrentUser, page: int = Query(1, ge=1), page_
         filters.append(Asset.asset_type == asset_type)
     if asset_status:
         filters.append(Asset.status == asset_status)
+    else:
+        # The default inventory view hides soft-deleted (inactive) assets;
+        # callers can still request them explicitly with status=inactive.
+        filters.append(Asset.status == "active")
     if importance is not None:
         filters.append(Asset.importance == importance)
     total = db.scalar(select(func.count()).select_from(Asset).where(*filters)) or 0

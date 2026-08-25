@@ -4,11 +4,12 @@ from fastapi import APIRouter, HTTPException, Query, status
 from sqlalchemy import select
 
 from app.api.deps import CurrentUser, DbSession
-from app.models import Asset, AssetService, ScanResult, ScanTask
+from app.models import ScanResult, ScanTask
 from app.schemas.scan import ScanCreate, ScanResponse, ScanResultResponse
 from app.services.scanner import ScanTargetError, nmap_available, run_nmap, validate_target_scope
 from app.services.audit import record_audit
 from app.tasks.scan_tasks import run_scan_task
+from app.services.scan_result_processor import process_scan_results
 
 router = APIRouter(prefix="/scans")
 
@@ -44,6 +45,19 @@ def get_scan(scan_id: int, user: CurrentUser, db: DbSession) -> ScanTask:
     return task
 
 
+@router.delete("/{scan_id}", status_code=status.HTTP_204_NO_CONTENT, summary="归档扫描任务")
+def delete_scan(scan_id: int, user: CurrentUser, db: DbSession) -> None:
+    task = db.get(ScanTask, scan_id)
+    is_admin = any(role.name == "admin" for role in user.roles)
+    if task is None or (task.created_by != user.id and not is_admin):
+        raise HTTPException(status_code=404, detail="扫描任务不存在")
+    if task.status == "running":
+        raise HTTPException(status_code=409, detail="扫描正在执行，不能删除")
+    record_audit(db, user_id=user.id, action="archive", resource="scan", resource_id=task.id, description="归档扫描任务")
+    task.status = "archived"
+    db.commit()
+
+
 @router.post("/{scan_id}/start", response_model=ScanResponse, summary="启动扫描任务")
 def start_scan(scan_id: int, user: CurrentUser, db: DbSession) -> ScanTask:
     task = db.get(ScanTask, scan_id)
@@ -65,16 +79,15 @@ def start_scan(scan_id: int, user: CurrentUser, db: DbSession) -> ScanTask:
                 task.status = "running"
                 task.started_at = datetime.now(timezone.utc)
                 discovered = run_nmap(task.target)
-                for item in discovered:
-                    asset = db.scalar(select(Asset).where(Asset.ip_address == item.ip_address))
-                    if asset is None:
-                        asset = Asset(asset_name=item.hostname or item.ip_address, asset_type="server", ip_address=item.ip_address, hostname=item.hostname, status="active")
-                        db.add(asset); db.flush()
-                    service = db.scalar(select(AssetService).where(AssetService.asset_id == asset.id, AssetService.port == item.port, AssetService.protocol == item.protocol))
-                    if service is None:
-                        db.add(AssetService(asset_id=asset.id, port=item.port, protocol=item.protocol, service_name=item.service_name, service_version=item.service_version, discovered_at=datetime.now(timezone.utc)))
-                    db.add(ScanResult(scan_task_id=task.id, asset_id=asset.id, result_type="service", normalized_data=f"{item.ip_address}:{item.port}/{item.protocol}"))
-                task.status = "completed"; task.result_summary = f"发现 {len(discovered)} 条开放服务"
+                summary = process_scan_results(db, task, discovered)
+                task.status = "completed"
+                task.result_summary = (
+                    f"发现 {summary['discovered_services']} 条开放服务，"
+                    f"保存 {summary['saved_results']} 条结果，"
+                    f"匹配 {summary['matched_cves']} 条CVE，"
+                    f"生成 {summary['created_vulnerabilities']} 条漏洞"
+                    + (f"，处理警告 {summary['processing_warnings']} 条" if summary["processing_warnings"] else "")
+                )
             except Exception as exc:
                 task.status = "failed"; task.error_message = str(exc)[:1000]
         task.finished_at = datetime.now(timezone.utc)

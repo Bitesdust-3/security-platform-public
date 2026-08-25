@@ -74,7 +74,9 @@ def top_risk_assets(user: CurrentUser, db: DbSession, limit: int = Query(10, ge=
 
 @router.get("/overview", response_model=RiskOverview, summary="风险总览")
 def risk_overview(_: CurrentUser, db: DbSession) -> RiskOverview:
-    asset_count = db.scalar(select(func.count()).select_from(Asset)) or 0
+    # Dashboard inventory follows the asset list: inactive (soft-deleted)
+    # assets are retained for history but excluded from the active total.
+    asset_count = db.scalar(select(func.count()).select_from(Asset).where(Asset.status == "active")) or 0
     vulnerability_count = db.scalar(select(func.count()).select_from(Vulnerability)) or 0
     open_filter = AssetVulnerability.status.in_(["open", "in_progress"])
     open_count = db.scalar(select(func.count()).select_from(AssetVulnerability).where(open_filter)) or 0

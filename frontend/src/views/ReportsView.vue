@@ -6,8 +6,10 @@ import client from "../api/client";
 import type { SecurityReport } from "../api/types";
 
 const reports = ref<SecurityReport[]>([]), selected = ref<SecurityReport | null>(null), visible = ref(false), loading = ref(false), generating = ref(false);
+const formatShanghai = (value: string) => new Intl.DateTimeFormat("zh-CN", { dateStyle: "medium", timeStyle: "medium", timeZone: "Asia/Shanghai", hour12: false }).format(new Date(value));
+const shanghaiDate = (value: Date) => new Intl.DateTimeFormat("sv-SE", { timeZone: "Asia/Shanghai" }).format(value);
 const load = async () => { loading.value = true; try { reports.value = (await client.get("/reports")).data; } catch { reports.value = []; } finally { loading.value = false; } };
-const generate = async () => { generating.value = true; try { const end = new Date(), start = new Date(end.getTime() - 30 * 86400000); await client.post("/reports", { report_name: `安全运营报告 ${end.toISOString().slice(0, 10)}`, period_start: start.toISOString(), period_end: end.toISOString() }); ElMessage.success("报告已生成"); await load(); } catch { ElMessage.error("报告生成失败，请确认管理员权限"); } finally { generating.value = false; } };
+const generate = async () => { generating.value = true; try { const end = new Date(), start = new Date(end.getTime() - 30 * 86400000); await client.post("/reports", { report_name: `安全运营报告 ${shanghaiDate(end)}`, period_start: start.toISOString(), period_end: end.toISOString() }); ElMessage.success("报告已生成"); await load(); } catch { ElMessage.error("报告生成失败，请确认管理员权限"); } finally { generating.value = false; } };
 const view = (row: SecurityReport) => { selected.value = row; visible.value = true; };
 const saveBlob = (blob: Blob, name: string) => { const url = URL.createObjectURL(blob); const link = document.createElement("a"); link.href = url; link.download = name; link.click(); URL.revokeObjectURL(url); };
 const download = async (row: SecurityReport) => { try { const response = await client.get(`/reports/${row.id}/pdf`, { responseType: "blob" }); saveBlob(response.data, `security-report-${row.id}.pdf`); } catch { ElMessage.error("PDF下载失败"); } };

@@ -13,6 +13,7 @@ services:
     image: mysql:8.4
     restart: unless-stopped
     environment:
+      TZ: Asia/Shanghai
       MYSQL_DATABASE: ${MYSQL_DATABASE:-security_platform}
       MYSQL_USER: ${MYSQL_USER:-security_user}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:?MYSQL_PASSWORD must be set}
@@ -34,6 +35,7 @@ services:
         NO_PROXY: ${NO_PROXY:-}
     restart: unless-stopped
     environment:
+      TZ: Asia/Shanghai
       DATABASE_URL: mysql+pymysql://${MYSQL_USER:-security_user}:${MYSQL_PASSWORD}@mysql:3306/${MYSQL_DATABASE:-security_platform}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY:?JWT_SECRET_KEY must be set}
       REDIS_URL: redis://redis:6379/0
@@ -63,6 +65,7 @@ services:
     restart: unless-stopped
     command: ["celery", "-A", "app.celery_app.celery_app", "worker", "--loglevel=INFO"]
     environment:
+      TZ: Asia/Shanghai
       DATABASE_URL: mysql+pymysql://${MYSQL_USER:-security_user}:${MYSQL_PASSWORD}@mysql:3306/${MYSQL_DATABASE:-security_platform}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY:?JWT_SECRET_KEY must be set}
       REDIS_URL: redis://redis:6379/0
@@ -87,6 +90,7 @@ services:
     restart: unless-stopped
     command: ["celery", "-A", "app.celery_app.celery_app", "beat", "--loglevel=INFO"]
     environment:
+      TZ: Asia/Shanghai
       DATABASE_URL: mysql+pymysql://${MYSQL_USER:-security_user}:${MYSQL_PASSWORD}@mysql:3306/${MYSQL_DATABASE:-security_platform}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY:?JWT_SECRET_KEY must be set}
       REDIS_URL: redis://redis:6379/0
@@ -101,7 +105,11 @@ services:
       retries: 3
     networks: [internal]
   frontend:
-    build: { context: .., dockerfile: docker/frontend.Dockerfile }
+    build:
+      context: ..
+      dockerfile: docker/frontend.Dockerfile
+      args:
+        NPM_REGISTRY: ${NPM_REGISTRY:-https://registry.npmmirror.com}
     restart: unless-stopped
     ports: ["${FRONTEND_PORT:-8080}:8080"]
     depends_on:

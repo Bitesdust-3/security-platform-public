@@ -1,11 +1,21 @@
-# 企业安全运营平台（简化版）
+<div align="center">
+
+# SecureOps
+
+### 轻量级企业安全运营平台
+
+`SOC` · `Asset Management` · `Vulnerability Management` · `Risk Analysis`
+
+</div>
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Docker](https://img.shields.io/badge/docker-compose-部署-2496ED.svg)](docker/docker-compose.yml)
+[![Docker Compose](https://img.shields.io/badge/Docker%20Compose-supported-2496ED?logo=docker&logoColor=white)](docker/docker-compose.yml)
 
 <!-- GitHub CI badge需在仓库确定OWNER/REPO后替换为实际Actions地址。 -->
 
-SecureOps 是一个面向授权实验环境的轻量级企业安全运营平台。
+## 项目介绍
+
+面向授权实验环境的轻量级企业安全运营平台。
 
 SecureOps 将资产登记、授权扫描、漏洞处置、CVE 情报、风险分析、自动化巡检、安全报告和审计记录串成一个可运行的安全运营闭环。项目适合在本地授权实验环境中学习和演示，不是面向公网生产环境的完整 SIEM 或漏洞利用平台。
 
@@ -20,7 +30,9 @@ SecureOps 将资产登记、授权扫描、漏洞处置、CVE 情报、风险分
 - HTML/PDF 安全报告生成
 - 关键操作审计日志和安全限流
 
-## 技术架构
+报告数据统一以 UTC 存储；Web、HTML 与 PDF 报告统一按 `Asia/Shanghai`（中国标准时间）展示。PDF 由 WeasyPrint 使用 Docker 镜像内的 Noto CJK 字体生成，不依赖浏览器或客户端字体。
+
+## 技术栈 Tech Stack
 
 | 层次 | 技术 |
 | --- | --- |
@@ -31,7 +43,7 @@ SecureOps 将资产登记、授权扫描、漏洞处置、CVE 情报、风险分
 | 扫描器 | 授权实验环境 Nmap |
 | 部署 | Docker、Docker Compose、Nginx |
 
-## 系统架构图
+## 系统架构 Architecture
 
 ```mermaid
 flowchart LR
@@ -44,18 +56,26 @@ flowchart LR
   W --> N[Nmap 授权扫描]
 ```
 
-## 项目截图
+## Screenshots / 项目截图
 
-真实系统截图位于 `docs/public/screenshots/`：
+真实截图位于 `docs/screenshots/`：
 
 | 页面 | 截图 |
 | --- | --- |
-| 登录页 | [`01-login.png`](docs/public/screenshots/01-login.png) |
-| Dashboard | [`02-dashboard.png`](docs/public/screenshots/02-dashboard.png) |
-| 资产管理 | [`03-assets.png`](docs/public/screenshots/03-assets.png) |
-| 漏洞管理 | [`04-vulnerabilities.png`](docs/public/screenshots/04-vulnerabilities.png) |
-| 审计日志 | [`05-audit.png`](docs/public/screenshots/05-audit.png) |
-| 安全报告 | [`06-reports.png`](docs/public/screenshots/06-reports.png) |
+| 登录页 | [`01-login.png`](docs/screenshots/01-login.png) |
+| Dashboard | [`02-dashboard.png`](docs/screenshots/02-dashboard.png) |
+| 资产管理 | [`03-assets.png`](docs/screenshots/03-assets.png) |
+| 扫描任务 | [`12-demo-scans-completed.png`](docs/screenshots/12-demo-scans-completed.png) |
+| 漏洞管理 | [`04-vulnerabilities.png`](docs/screenshots/04-vulnerabilities.png) |
+| 风险分析 | [`13-demo-risk-dashboard.png`](docs/screenshots/13-demo-risk-dashboard.png) |
+| 安全报告 | [`06-reports.png`](docs/screenshots/06-reports.png) |
+
+## Demo 展示
+
+Demo 来自独立 E2E 环境和授权测试目标 `127.0.0.1`，展示真实系统和真实 API 数据。
+
+- [观看或下载 Demo 录屏](docs/demo-secureops.webm)
+- [查看演示流程](docs/demo-flow.md)
 
 ## 当前状态
 
@@ -138,9 +158,9 @@ tests/          后端测试代码
 11. Docker 部署
 12. 项目优化和部署验证
 
-后端 API 说明见 [docs/public/api.md](docs/public/api.md)，贡献方式见 [CONTRIBUTING.md](CONTRIBUTING.md)，版本记录见 [CHANGELOG.md](CHANGELOG.md)。
+公开 API、部署、安全设计和使用说明见 [`docs/public/`](docs/public/)。演示脚本见 [docs/demo.md](docs/demo.md)，贡献方式见 [CONTRIBUTING.md](CONTRIBUTING.md)，版本记录见 [CHANGELOG.md](CHANGELOG.md)。
 
-测试说明见 [docs/public/testing.md](docs/public/testing.md)。默认单元测试使用 SQLite 内存数据库；MySQL 迁移测试和浏览器测试均使用独立测试环境，避免影响开发数据。
+默认单元测试使用 SQLite 内存数据库；MySQL 迁移测试和浏览器测试使用独立测试环境，避免影响开发数据。
 
 ## 后端基础环境
 
@@ -225,7 +245,7 @@ sudo apt-get install nmap
 - `DELETE /api/v1/vulnerabilities/{id}`
 - `GET /api/v1/vulnerabilities/statistics`
 
-当前不执行自动漏洞库匹配、漏洞利用或攻击验证。
+扫描完成后会基于已同步的 `cve_intelligence` 情报对发现的产品/版本执行保守匹配，并将可能匹配结果写入漏洞管理；匹配结果需要人工核实，不执行漏洞利用或攻击验证。
 
 ## 风险分析模块
 
@@ -265,7 +285,7 @@ npm run dev
 
 ## 自动化巡检
 
-自动化巡检使用 Redis + Celery Worker + Celery Beat。定时任务配置持久化在新增的 `scan_schedules` 表中，Worker 执行授权范围内的 Nmap 服务发现，完成后保存真实扫描结果并同步资产服务信息；不虚构 CVE 数据。
+自动化巡检使用 Redis + Celery Worker + Celery Beat。定时任务配置持久化在新增的 `scan_schedules` 表中，Worker 执行授权范围内的 Nmap 服务发现，完成后通过统一结果处理服务保存真实扫描结果、同步资产服务信息并尝试关联 CVE；不虚构 CVE 数据。Redis/Celery 不可用时的同步备用路径也复用同一处理逻辑。
 
 Docker Compose 会启动 `redis`、`celery_worker` 和 `celery_beat`。首次部署需要执行迁移：
 
@@ -291,4 +311,6 @@ CVE 情报模块使用 NVD API 2.0 作为主数据源，独立保存于 `cve_int
 
 报告表由 Alembic 迁移 `c3d4e5f6a7b8` 创建。PDF 使用 WeasyPrint 生成；Docker 环境如需 PDF 导出，应安装其系统字体和 Pango/Cairo 运行库。
 
-架构、安全设计、部署、测试和用户手册见 [`docs/public/`](docs/public/) 目录。测试账号仅用于本地演示，部署前必须修改密码。
+架构、安全设计、部署、测试和已知限制见 [`docs/public/`](docs/public/) 目录。
+
+演示截图位于 `docs/screenshots/`，测试账号仅用于本地演示，部署前必须修改密码。

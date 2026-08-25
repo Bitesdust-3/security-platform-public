@@ -31,6 +31,12 @@ class ScanResultResponse(BaseModel):
     scan_task_id: int
     asset_id: int | None
     result_type: str
+    ip_address: str | None
+    port: int | None
+    protocol: str | None
+    service_name: str | None
+    product_name: str | None
+    service_version: str | None
     raw_summary: str | None
     normalized_data: str | None
     created_at: datetime

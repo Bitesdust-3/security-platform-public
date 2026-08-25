@@ -1,0 +1,20 @@
+/* Keep the five command-center metrics on one row on desktop. */
+.soc-dashboard .metric-col { flex: 0 0 20% !important; max-width: 20% !important; }
+@media (max-width: 900px) {
+  .soc-dashboard .metric-col { flex: 0 0 50% !important; max-width: 50% !important; }
+}
+
+/* Improve contrast for Element Plus components on the SOC dark theme. */
+.el-descriptions__label.el-descriptions__cell,
+.el-descriptions__content.el-descriptions__cell {
+  background: rgba(7, 25, 44, .92) !important;
+  color: #bfe7ff !important;
+  border-color: rgba(95, 188, 255, .22) !important;
+}
+.el-descriptions__label.el-descriptions__cell { color: #65d9e8 !important; font-weight: 600; }
+.el-table .el-button.is-link { color: #7bdcf2 !important; text-shadow: 0 0 8px rgba(53, 230, 210, .35); }
+.el-table .el-button.is-link:hover { color: #ffffff !important; }
+.el-table .el-button--danger.is-link { color: #ff8294 !important; }
+.el-table .el-button--success.is-link { color: #65e6c8 !important; }
+.el-table .el-button.is-disabled { color: #5a7288 !important; opacity: .7; }
+.el-drawer .el-descriptions { --el-descriptions-item-bordered-label-background: rgba(7, 25, 44, .92); }

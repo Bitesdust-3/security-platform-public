@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import HTMLResponse, Response
 from sqlalchemy import select
@@ -27,6 +28,15 @@ def list_reports(user:CurrentUser,db:DbSession,limit:int=Query(50,ge=1,le=100)):
 @router.get("/{report_id}",response_model=ReportResponse)
 def get_report(report_id:int,user:CurrentUser,db:DbSession):
     row=_get_allowed(report_id,user,db)
+    return as_dict(row)
+
+@router.post("/{report_id}/archive", response_model=ReportResponse)
+def archive_report(report_id: int, user: AdminUser, db: DbSession):
+    row = _get_allowed(report_id, user, db)
+    row.status = "archived"
+    row.archived_at = datetime.now(timezone.utc)
+    row.archived_by = user.id
+    db.commit(); db.refresh(row)
     return as_dict(row)
 @router.get("/{report_id}/html",response_class=HTMLResponse)
 def html_report(report_id:int,user:CurrentUser,db:DbSession):
