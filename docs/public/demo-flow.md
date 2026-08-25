@@ -53,6 +53,6 @@ SecureOps 是一个轻量级企业安全运营平台，将资产登记、授权�
 
 已在同一独立测试环境录制真实操作视频：
 
-- [demo-secureops.webm](demo-secureops.webm)
+- [demo-secureops-v2.webm](../demo-secureops-v2.webm)
 
 录屏包含登录、Dashboard、资产管理、扫描任务、漏洞管理和安全报告页面。视频不包含密码、JWT 或数据库配置；扫描范围仅为授权的 `127.0.0.1` 测试目标。

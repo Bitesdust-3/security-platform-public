@@ -76,7 +76,7 @@ flowchart LR
 
 Demo 来自独立 E2E 环境和授权测试目标 `127.0.0.1`，展示真实系统和真实 API 数据。
 
-- [观看或下载 Demo 录屏](docs/demo-secureops.webm)
+- [观看或下载 Demo V2 录屏](docs/demo-secureops-v2.webm)
 - [Demo Usage](docs/public/demo-flow.md)
 
 ### 独立演示数据
