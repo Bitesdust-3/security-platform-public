@@ -79,6 +79,10 @@ Demo 来自独立 E2E 环境和授权测试目标 `127.0.0.1`，展示真实系�
 - [观看或下载 Demo 录屏](docs/demo-secureops.webm)
 - [Demo Usage](docs/public/demo-flow.md)
 
+### 独立演示数据
+
+仓库提供仅用于演示的独立数据初始化脚本 `backend/app/db/demo_seed.py`。脚本要求数据库名称以 `_demo` 结尾，并要求显式设置 `ALLOW_DEMO_SEED=true`，不会写入正式数据库。可使用 `docker/docker-compose.demo.yml` 启动隔离Demo环境，演示数据会明确标记为 `[DEMO-V2]`。
+
 ## 当前状态
 
 当前版本为 `0.1.0` MVP 展示版本，已完成认证、资产、授权扫描、漏洞、CVE、风险、自动化巡检、报告、审计、前端和 Docker 编排。真实 Nmap 扫描仍必须在明确授权的实验环境中执行。

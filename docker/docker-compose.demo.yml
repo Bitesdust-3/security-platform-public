@@ -1,0 +1,7 @@
+services:
+  backend:
+    environment:
+      ALLOW_DEMO_SEED: "true"
+  celery_worker:
+    environment:
+      ALLOW_DEMO_SEED: "true"
