@@ -24,4 +24,4 @@ def test_mysql_upgrade_head_creates_complete_schema():
     required = {"users", "assets", "scan_tasks", "scan_results", "vulnerabilities", "cve_intelligence", "scan_schedules", "security_reports", "audit_logs"}
     assert required.issubset(set(inspect(engine).get_table_names()))
     with engine.connect() as connection:
-        assert connection.execute(text("SELECT version_num FROM alembic_version")).scalar_one() == "c3d4e5f6a7b8"
+        assert connection.execute(text("SELECT version_num FROM alembic_version")).scalar_one() == "f5a6b7c8d9e0"
