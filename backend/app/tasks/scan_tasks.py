@@ -41,9 +41,9 @@ def run_scan_task(self, scan_task_id: int, schedule_id: int | None = None):
             return
         try:
             _execute_scan(db, scan_task)
-        except (OSError, subprocess.TimeoutExpired, subprocess.CalledProcessError, ValueError, RuntimeError) as exc:
+        except Exception as exc:
             scan_task.status = "failed"
-            scan_task.error_message = str(exc)[:1000]
+            scan_task.error_message = f"扫描处理失败: {exc}"[:1000]
             scan_task.finished_at = datetime.now(timezone.utc)
             db.commit()
             if schedule_id:

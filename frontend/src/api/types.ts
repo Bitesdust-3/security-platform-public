@@ -62,7 +62,7 @@ export interface Scan {
   error_message: string | null;
   result_summary?: string | null;
 }
-export interface ScanResult { id: number; scan_task_id: number; asset_id: number | null; result_type: string; ip_address: string | null; port: number | null; protocol: string | null; service_name: string | null; product_name: string | null; service_version: string | null; raw_summary: string | null; normalized_data: string | null; created_at: string; }
+export interface ScanResult { id: number; scan_task_id: number; asset_id: number | null; result_type: string; ip_address: string | null; port: number | null; protocol: string | null; port_state: string | null; service_name: string | null; product_name: string | null; service_version: string | null; raw_summary: string | null; normalized_data: string | null; created_at: string; }
 export interface ScanSchedule { id: number; task_name: string; target: string; asset_id: number | null; scan_type: string; schedule_type: string; execute_at: string | null; cron_expression: string | null; status: string; created_by: number | null; last_run_at: string | null; next_run_at: string | null; error_message: string | null; created_at: string; updated_at: string; }
 export interface Vulnerability {
   id: number;

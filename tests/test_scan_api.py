@@ -11,7 +11,7 @@ from app.db.base import Base
 from app.db.dependencies import get_db
 from app.main import app
 from app.models import Asset, Role, User
-from app.services.scanner import DiscoveredService
+from app.services.scanner import DiscoveredService, NmapExecutionError
 
 engine = create_engine("sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool)
 SessionTesting = sessionmaker(bind=engine, autoflush=False, autocommit=False)
@@ -49,7 +49,7 @@ def test_scan_task_and_asset_sync(monkeypatch):
     scan_id = created.json()["id"]
 
     monkeypatch.setattr(scans_route, "nmap_available", lambda: True)
-    monkeypatch.setattr(scans_route, "run_nmap", lambda target: [DiscoveredService("192.0.2.10", "lab-host", 443, "tcp", "https", "nginx")])
+    monkeypatch.setattr(scans_route, "run_nmap", lambda target: [DiscoveredService("192.0.2.10", "lab-host", 443, "tcp", "open", "https", "nginx", "1.24", {"name": "https"})])
     started = client.post(f"/api/v1/scans/{scan_id}/start", headers=headers)
     assert started.status_code == 200
     assert started.json()["status"] == "completed"
@@ -58,3 +58,20 @@ def test_scan_task_and_asset_sync(monkeypatch):
         asset = session.scalar(select(Asset).where(Asset.ip_address == "192.0.2.10"))
         assert asset is not None
         assert asset.asset_name == "lab-host"
+
+
+def test_scan_execution_error_is_marked_failed_not_completed(monkeypatch):
+    app.dependency_overrides[get_db] = override_get_db
+    monkeypatch.setattr(scans_route.run_scan_task, "delay", lambda *_args, **_kwargs: (_ for _ in ()).throw(ConnectionError("broker disabled in unit test")))
+    login = client.post("/api/v1/auth/login", json={"username": "scan-admin", "password": "scan-password-123"})
+    headers = {"Authorization": f"Bearer {login.json()['access_token']}"}
+    created = client.post("/api/v1/scans", headers=headers, json={"task_name": "failed scan", "target": "192.0.2.11", "scan_type": "port_scan"})
+    scan_id = created.json()["id"]
+    monkeypatch.setattr(scans_route, "nmap_available", lambda: True)
+    monkeypatch.setattr(scans_route, "run_nmap", lambda _target: (_ for _ in ()).throw(NmapExecutionError("Nmap 主机扫描超时")))
+
+    started = client.post(f"/api/v1/scans/{scan_id}/start", headers=headers)
+
+    assert started.status_code == 200
+    assert started.json()["status"] == "failed"
+    assert "超时" in started.json()["error_message"]

@@ -20,7 +20,7 @@ def test_scan_result_processor_creates_and_deduplicates_vulnerability():
         task = ScanTask(task_name="processor test", target="192.0.2.44", scan_type="port_scan", status="running")
         session.add_all([cve, task])
         session.flush()
-        service = DiscoveredService("192.0.2.44", "fixture", 443, "tcp", "nginx", "1.24")
+        service = DiscoveredService("192.0.2.44", "fixture", 443, "tcp", "open", "https", "nginx", "1.24", {"name": "https", "product": "nginx", "version": "1.24"})
 
         first = process_scan_results(session, task, [service])
         session.commit()

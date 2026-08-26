@@ -140,6 +140,7 @@ class ScanResult(Base):
     ip_address: Mapped[Optional[str]] = mapped_column(String(45), index=True)
     port: Mapped[Optional[int]] = mapped_column(Integer, index=True)
     protocol: Mapped[Optional[str]] = mapped_column(String(16))
+    port_state: Mapped[Optional[str]] = mapped_column(String(16))
     service_name: Mapped[Optional[str]] = mapped_column(String(128), index=True)
     product_name: Mapped[Optional[str]] = mapped_column(String(128), index=True)
     service_version: Mapped[Optional[str]] = mapped_column(String(128))

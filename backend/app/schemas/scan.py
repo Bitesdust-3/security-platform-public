@@ -34,6 +34,7 @@ class ScanResultResponse(BaseModel):
     ip_address: str | None
     port: int | None
     protocol: str | None
+    port_state: str | None
     service_name: str | None
     product_name: str | None
     service_version: str | None

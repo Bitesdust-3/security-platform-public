@@ -39,7 +39,7 @@ def _candidate_cves(db, item: DiscoveredService) -> list[tuple[CveIntelligence, 
     A version, when available, is required to upgrade confidence to ``high``;
     the record remains a possible match when only the product is known.
     """
-    products = _tokens(item.service_name)
+    products = _tokens(item.product_name) | _tokens(item.service_name)
     if not products:
         return []
     product_filters = [CveIntelligence.affected_products.ilike(f"%{token}%") for token in products]
@@ -94,11 +94,14 @@ def process_scan_results(db, scan_task: ScanTask, discovered: list[DiscoveredSer
             ip_address=item.ip_address,
             port=item.port,
             protocol=item.protocol,
+            port_state=item.state,
             service_name=item.service_name,
-            product_name=item.service_name,
+            product_name=item.product_name,
             service_version=item.service_version,
             raw_summary=json.dumps({"ip": item.ip_address, "port": item.port, "protocol": item.protocol,
-                                    "service": item.service_name, "version": item.service_version}, ensure_ascii=False),
+                                    "state": item.state, "service": item.service_name,
+                                    "product": item.product_name, "version": item.service_version,
+                                    "nmap": item.raw_nmap}, ensure_ascii=False),
             normalized_data=f"{item.ip_address}:{item.port}/{item.protocol}"
                             f" {item.service_name or 'unknown'} {item.service_version or ''}".strip(),
         ))
