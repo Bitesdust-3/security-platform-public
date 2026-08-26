@@ -204,6 +204,7 @@ class SecurityReport(TimestampMixin, Base):
     scan_statistics: Mapped[str] = mapped_column(Text, default="{}")
     vulnerability_trend: Mapped[str] = mapped_column(Text, default="[]")
     top_risk_assets: Mapped[str] = mapped_column(Text, default="[]")
+    top_vulnerabilities: Mapped[str] = mapped_column(Text, default="[]")
     recommendations: Mapped[str] = mapped_column(Text, default="[]")
     report_html: Mapped[Optional[str]] = mapped_column(Text().with_variant(LONGTEXT(), "mysql"))
     status: Mapped[str] = mapped_column(String(16), default="generated", index=True)

@@ -1,323 +1,175 @@
 <div align="center">
 
-<img src="docs/public/banner.png" alt="SecureOps Enterprise Security Operations Platform" width="100%" />
+<img src="docs/public/banner.png" alt="SecureOps — Enterprise Security Operations Platform" width="100%" />
 
 # SecureOps
 
-### 轻量级企业安全运营平台
+### 轻量级企业安全运营平台 · Lightweight Security Operations Platform
 
-`SOC` · `Asset Management` · `Vulnerability Management` · `Risk Analysis`
+[![License: MIT](https://img.shields.io/badge/License-MIT-2563EB?style=flat-square)](LICENSE)
+[![Docker Compose](https://img.shields.io/badge/Docker%20Compose-supported-2496ED?style=flat-square&logo=docker&logoColor=white)](docker/docker-compose.yml)
+
+`Asset Management` · `Authorized Scanning` · `Vulnerability Management` · `Risk Analysis`
 
 </div>
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Docker Compose](https://img.shields.io/badge/Docker%20Compose-supported-2496ED?logo=docker&logoColor=white)](docker/docker-compose.yml)
-
-<!-- GitHub CI badge需在仓库确定OWNER/REPO后替换为实际Actions地址。 -->
-
 ## 项目介绍
 
-面向授权实验环境的轻量级企业安全运营平台。
+SecureOps 是一个面向**授权实验环境**的轻量级企业安全运营平台。它将资产登记、Nmap 服务识别、CVE 候选匹配、漏洞管理、风险分析、自动化巡检、审计记录与安全报告整合为可运行的 SOC MVP 闭环。
 
-SecureOps 将资产登记、授权扫描、漏洞处置、CVE 情报、风险分析、自动化巡检、安全报告和审计记录串成一个可运行的安全运营闭环。项目适合在本地授权实验环境中学习和演示，不是面向公网生产环境的完整 SIEM 或漏洞利用平台。
+> 本项目用于授权测试、学习和演示；不包含漏洞利用、攻击验证或面向未授权目标的扫描能力。
 
-## 功能特点
+## 核心能力
 
-- 用户认证、JWT 和基础角色权限控制
-- 资产管理、服务发现和停用策略
-- 基于 Nmap 的授权安全扫描
-- CVE/CVSS 漏洞管理与 NVD 情报同步
-- 可解释风险评分、等级统计和趋势分析
-- Redis + Celery 自动化扫描任务
-- HTML/PDF 安全报告生成
-- 关键操作审计日志和安全限流
+- JWT 认证、基础 RBAC 权限控制与操作审计
+- 资产登记、状态管理、服务信息维护与停用策略
+- 基于 Nmap 的授权扫描：端口、服务、产品与版本结构化保存
+- 扫描结果 → 服务标准化 → CVE 候选匹配 → 漏洞记录 → 风险刷新的数据链路
+- CVE/CVSS 情报管理与 NVD 增量同步
+- 可解释风险评分、风险等级分布、高风险资产排行与趋势数据
+- Redis + Celery Worker/Beat 自动化巡检
+- 基于真实数据库快照的 HTML/PDF 安全运营报告
+- Docker Compose 一键编排 MySQL、Redis、后端、前端与后台任务
 
-报告数据统一以 UTC 存储；Web、HTML 与 PDF 报告统一按 `Asia/Shanghai`（中国标准时间）展示。PDF 由 WeasyPrint 使用 Docker 镜像内的 Noto CJK 字体生成，不依赖浏览器或客户端字体。
-
-## 技术栈 Tech Stack
-
-| 层次 | 技术 |
-| --- | --- |
-| 前端 | Vue 3、TypeScript、Element Plus、ECharts |
-| 后端 | Python、FastAPI、SQLAlchemy、Alembic |
-| 数据库 | MySQL 8.4 |
-| 任务队列 | Redis、Celery Worker、Celery Beat |
-| 扫描器 | 授权实验环境 Nmap |
-| 部署 | Docker、Docker Compose、Nginx |
-
-## 系统架构 Architecture
+## 系统架构
 
 ```mermaid
 flowchart LR
-  U[浏览器] --> F[Nginx + Vue3]
-  F --> B[FastAPI]
-  B --> M[(MySQL)]
-  B --> R[Redis]
-  R --> W[Celery Worker]
-  T[Celery Beat] --> R
-  W --> N[Nmap 授权扫描]
+    User[Browser] --> Web[Nginx + Vue 3]
+    Web --> API[FastAPI]
+    API --> DB[(MySQL)]
+    API --> Queue[(Redis)]
+    Beat[Celery Beat] --> Queue
+    Queue --> Worker[Celery Worker]
+    Worker --> Nmap[Nmap · Authorized Targets]
+    Worker --> DB
 ```
 
-## Screenshots / 项目截图
+## 技术栈
 
-真实截图位于 `docs/screenshots/`：
-
-| 页面 | 截图 |
+| Layer | Stack |
 | --- | --- |
-| 登录页 | [`07-demo-login.png`](docs/screenshots/07-demo-login.png) |
-| Dashboard | [`08-demo-dashboard.png`](docs/screenshots/08-demo-dashboard.png) |
-| 资产管理 | [`09-demo-assets.png`](docs/screenshots/09-demo-assets.png) |
-| 扫描任务 | [`12-demo-scans-completed.png`](docs/screenshots/12-demo-scans-completed.png) |
-| 漏洞管理 | [`14-demo-vulnerabilities.png`](docs/screenshots/14-demo-vulnerabilities.png) |
-| 风险分析 | [`13-demo-risk-dashboard.png`](docs/screenshots/13-demo-risk-dashboard.png) |
-| 安全报告 | [`15-demo-reports.png`](docs/screenshots/15-demo-reports.png) |
+| Frontend | Vue 3 · TypeScript · Element Plus · ECharts |
+| Backend | FastAPI · SQLAlchemy · Alembic |
+| Database | MySQL 8.4 |
+| Async Jobs | Redis · Celery Worker · Celery Beat |
+| Scanner | Nmap（仅授权实验环境） |
+| Deployment | Docker Compose · Nginx |
 
-## Demo 展示
+## 真实验证链路
 
-Demo 来自独立 E2E 环境和授权测试目标 `127.0.0.1`，展示真实系统和真实 API 数据。
+在授权实验目标上，SecureOps 已完成以下真实闭环验证：
 
-- [观看或下载 Demo V2 录屏](docs/demo-secureops-v2.webm)
-- [Demo Usage](docs/public/demo-flow.md)
-
-### 独立演示数据
-
-仓库提供仅用于演示的独立数据初始化脚本 `backend/app/db/demo_seed.py`。脚本要求数据库名称以 `_demo` 结尾，并要求显式设置 `ALLOW_DEMO_SEED=true`，不会写入正式数据库。可使用 `docker/docker-compose.demo.yml` 启动隔离Demo环境，演示数据会明确标记为 `[DEMO-V2]`。
-
-## 当前状态
-
-当前版本为 `0.1.0` MVP 展示版本，已完成认证、资产、授权扫描、漏洞、CVE、风险、自动化巡检、报告、审计、前端和 Docker 编排。真实 Nmap 扫描仍必须在明确授权的实验环境中执行。
-
-## Docker 部署
-
-开发/演示环境复制 `.env.example` 为 `.env`；生产模拟环境复制 `.env.production.example` 为 `.env.production`。两者都必须设置强密码和随机 JWT 密钥，然后运行：
-
-```bash
-docker compose -f docker/docker-compose.yml --env-file .env up --build -d
+```text
+资产登记 → 创建扫描任务 → Nmap 服务/版本识别 → 结构化结果入库
+→ CVE 候选匹配 → 漏洞记录与去重 → 风险刷新 → 安全报告生成
 ```
 
-生产配置启动方式：
+扫描对象与环境配置不会提交到仓库。若没有匹配到 CVE，系统仍会保留真实扫描结果并明确显示“暂无匹配 CVE”，不会伪造漏洞数据。
+
+## Demo
+
+- [观看或下载真实 Demo V2 录屏（WebM）](docs/demo-secureops-v2.webm)
+- [查看公开 Demo 使用说明](docs/public/demo-flow.md)
+
+Demo 使用隔离的 E2E 数据与授权测试目标，展示真实前端、API 与数据库交互。
+
+## Screenshots
+
+<p align="center">
+  <img src="docs/public/screenshots/08-demo-dashboard.png" alt="SecureOps Dashboard" width="48%" />
+  <img src="docs/public/screenshots/09-demo-assets.png" alt="SecureOps Asset Management" width="48%" />
+</p>
+<p align="center">
+  <img src="docs/public/screenshots/12-demo-scans-completed.png" alt="SecureOps Scan Results" width="48%" />
+  <img src="docs/public/screenshots/14-demo-vulnerabilities.png" alt="SecureOps Vulnerability Management" width="48%" />
+</p>
+<p align="center">
+  <img src="docs/public/screenshots/17-cve-intelligence.png" alt="SecureOps CVE Intelligence" width="48%" />
+  <img src="docs/public/screenshots/18-audit-log.png" alt="SecureOps Audit Log" width="48%" />
+</p>
+<p align="center">
+  <img src="docs/public/screenshots/13-demo-risk-dashboard.png" alt="SecureOps Risk Analysis" width="48%" />
+  <img src="docs/public/screenshots/16-security-report-cover.png" alt="SecureOps PDF Security Report" width="24%" />
+</p>
+
+更多页面截图见 [截图目录](docs/public/screenshots/)。其中 PDF 报告封面来自当前版本使用真实数据库快照生成的报告；展示素材不包含扫描目标、账户密码或环境密钥。
+
+## Security Report
+
+报告由当前数据库快照生成，并以正式可读的 PDF 版式呈现：
+
+- 安全概览：资产、漏洞、CVE 与高危及以上风险统计
+- 中文风险等级分布与图表，不输出 JSON 或内部字段
+- Top 高风险资产与 Top 高风险漏洞
+- 扫描任务总量、完成/失败/运行中状态与成功率
+- 基于真实统计自动生成的整改建议
+
+报告中所有统计会随数据库数据变化而更新；空数据会以明确的业务提示展示，而不会伪造数据。
+
+## 快速部署
+
+### 1. 克隆并创建本地配置
 
 ```bash
-cp .env.production.example .env.production
-# 编辑 .env.production，填入真实密钥；该文件不会提交到 Git
-docker compose -f docker/docker-compose.yml --env-file .env.production up --build -d
-```
-
-前端默认访问地址为 `http://localhost:8080`。后端入口会执行数据库迁移；首次部署请查看 [部署说明](docs/public/deployment.md)。
-
-## 一键部署
-
-准备 `.env`：
-
-```bash
+git clone https://github.com/Bitesdust-3/security-platform-public.git
+cd security-platform-public
 cp .env.example .env
 ```
 
-生产环境必须保持 `ENVIRONMENT=production`、`SEED_DEMO_DATA=false`，并将 `CORS_ORIGINS` 改为实际访问来源。仅本地演示时才设置 `SEED_DEMO_DATA=true` 和 `DEMO_ADMIN_PASSWORD`，然后执行：
+编辑 `.env`，为 `MYSQL_PASSWORD`、`MYSQL_ROOT_PASSWORD` 与 `JWT_SECRET_KEY` 设置强随机值。`.env` 已被 Git 忽略，不应提交。
+
+### 2. 启动服务
 
 ```bash
-docker compose -f docker/docker-compose.yml --env-file .env up --build
+docker compose -f docker/docker-compose.yml --env-file .env up --build -d
+docker compose -f docker/docker-compose.yml --env-file .env ps
 ```
 
-前台调试可省略 `-d`；常规部署建议使用前文的后台启动命令，并通过 `docker compose ... logs -f backend` 查看日志。
+首次启动时后端会等待 MySQL 健康检查并执行 Alembic 迁移。服务正常后访问：
 
-启动流程会等待 MySQL 健康检查，执行 `alembic upgrade head`，按需初始化演示数据，再启动 FastAPI。演示数据使用文档测试网段并明确标注为 demo。生产模拟验证应使用独立的 `.env.production` 和独立 Compose 项目，避免与开发数据卷混用。
+- Web：`http://localhost:8080`
+- API health：`http://localhost:8000/health`（如 Compose 暴露该端口）
 
-Docker MySQL 默认创建数据库 `security_platform` 和用户 `security_user`。请从 `.env.example` 复制生成未提交的 `.env`，为 `MYSQL_PASSWORD`、`MYSQL_ROOT_PASSWORD`、`JWT_SECRET_KEY` 和（如启用演示数据）`DEMO_ADMIN_PASSWORD` 设置安全值；这些敏感值不得写入源码或文档。
+生产模拟环境请使用 `.env.production.example` 创建**未提交**的 `.env.production`，设置 `ENVIRONMENT=production`、关闭演示数据，并限制 `CORS_ORIGINS`。
 
-当前采用方案：从零开发简化版安全运营平台。
+完整环境变量、部署步骤和故障排查见 [部署文档](docs/public/deployment.md)。
 
-默认技术栈：
-
-- 后端：Python + FastAPI
-- 前端：Vue 3 + Element Plus
-- 数据库：MySQL
-- 部署：Docker + Docker Compose
-- 扫描器：授权实验环境中的 Nmap，后续可扩展 Nuclei
-
-## 目录
+## 项目结构
 
 ```text
-backend/        后端代码、Alembic迁移和Celery任务
-frontend/       前端代码
-docker/         Dockerfile、Compose和Nginx配置
-docs/           项目与部署文档
-tests/          后端测试代码
+backend/      FastAPI、SQLAlchemy 模型、Alembic 迁移、Celery 任务
+frontend/     Vue 3 管理后台
+docker/       Dockerfile、Docker Compose、Nginx 配置
+docs/public/  公开架构、安全、API、部署与使用文档
+tests/        后端与迁移测试
 ```
+
+## 文档
+
+- [系统架构](docs/public/architecture.md)
+- [部署说明](docs/public/deployment.md)
+- [API 概览](docs/public/api.md)
+- [安全设计](docs/public/security-design.md)
+- [数据库设计](docs/public/database.md)
+- [测试说明](docs/public/testing.md)
+- [已知限制](docs/public/known-limitations.md)
 
 ## 安全边界
 
-扫描功能仅面向用户明确授权的本地实验环境、单个目标或实验网段。项目不开发攻击真实目标、恶意代码或不必要的危险功能。
+- 仅对拥有明确授权的资产或实验环境执行扫描。
+- 扫描请求经过目标格式和授权范围校验；不会接受任意命令参数。
+- 匹配到的 CVE 仅表示候选风险，需由安全人员复核后处置。
+- 数据库密码、JWT 密钥、令牌、日志、数据库文件与个人开发资料均不纳入仓库。
 
-## 项目状态
+## Roadmap
 
-当前版本已完成从数据采集到风险展示的核心闭环，可通过 Docker Compose 启动并用于授权实验环境演示：
+- [x] 资产、扫描、CVE、漏洞、风险、审计与报告核心闭环
+- [x] Docker Compose、迁移和基础 CI 验证
+- [ ] 提升 CPE/版本范围匹配准确率
+- [ ] 增强多实例限流、监控与集中日志能力
+- [ ] 完善更多授权实验环境的回归覆盖
 
-- ✅ FastAPI 后端、Vue 3 管理后台与 MySQL 持久化
-- ✅ JWT 认证、角色权限控制与操作审计
-- ✅ 资产登记、状态管理与服务信息维护
-- ✅ Nmap 授权扫描、结果解析与结构化保存
-- ✅ CVE 情报同步、候选匹配与漏洞关联
-- ✅ 漏洞生命周期、CVSS 评分与风险分析
-- ✅ Celery + Redis 自动化扫描任务
-- ✅ 安全报告生成与 PDF 导出
-- ✅ Docker Compose 部署、数据库迁移与 CI 验证
+## License
 
-后续版本将根据实际使用反馈持续改进匹配准确率、可观测性和生产部署能力；当前核心 MVP 已完成并可运行。
-
-公开 API、部署、安全设计和使用说明见 [`docs/public/`](docs/public/)。Demo流程见 [Demo Usage](docs/public/demo-flow.md)，贡献方式见 [CONTRIBUTING.md](CONTRIBUTING.md)，版本记录见 [CHANGELOG.md](CHANGELOG.md)。
-
-默认单元测试使用 SQLite 内存数据库；MySQL 迁移测试和浏览器测试使用独立测试环境，避免影响开发数据。
-
-## 后端基础环境
-
-环境要求：Python 3.12+、pip、FastAPI、Uvicorn。创建虚拟环境并安装依赖：
-
-```bash
-python3 -m venv venv
-venv/bin/python -m pip install -r backend/requirements.txt
-```
-
-启动后端：
-
-```bash
-PYTHONPATH=backend venv/bin/uvicorn app.main:app --reload --port 8000
-```
-
-健康检查：访问 `http://127.0.0.1:8000/health`，应返回健康状态 JSON。完整功能建议通过 Docker Compose 启动。
-
-## 数据库基础配置
-
-设置 `backend/.env` 中的 `DATABASE_URL`，例如：
-
-```text
-DATABASE_URL=mysql+pymysql://security_user:<password>@localhost:3306/security_platform
-```
-
-在 `backend/` 目录执行 Alembic：
-
-```bash
-PYTHONPATH=. ../venv/bin/alembic revision --autogenerate -m "initial schema"
-PYTHONPATH=. ../venv/bin/alembic upgrade head
-```
-
-本地单元测试使用 SQLite 进行快速验证；Docker 部署使用 MySQL 8.4，迁移由后端入口自动执行。
-
-## 用户认证
-
-后端提供注册、登录和当前用户接口。密码使用 bcrypt 哈希保存，JWT 密钥和过期时间通过环境变量配置：
-
-- `POST /api/v1/auth/register`
-- `POST /api/v1/auth/login`
-- `GET /api/v1/auth/me`
-
-运行认证测试：
-
-```bash
-PYTHONPATH=backend venv/bin/pytest -q tests/test_auth_api.py
-```
-
-## 资产管理 API
-
-资产查询接口要求 JWT；普通用户可以查询列表和详情，管理员可以创建、更新、替换和停用资产。
-
-- `GET /api/v1/assets?page=1&page_size=10&ip_address=&hostname=&asset_type=&status=`
-- `POST /api/v1/assets`
-- `GET /api/v1/assets/{id}`
-- `PUT /api/v1/assets/{id}`
-- `PATCH /api/v1/assets/{id}`
-- `DELETE /api/v1/assets/{id}`
-
-资产列表响应格式为 `data`、`total`、`page`、`page_size`，资产删除采用停用策略，不执行物理删除。
-
-## 安全扫描模块
-
-扫描模块只面向明确授权的私有、回环或文档测试地址。需要在系统中安装 Nmap，并通过 JWT 创建任务：
-
-```bash
-# Debian/Ubuntu 示例
-sudo apt-get install nmap
-```
-
-接口流程：创建 `POST /api/v1/scans` → 启动 `POST /api/v1/scans/{id}/start` → 查询任务和结果。后端使用安全参数列表调用 Nmap，不接受任意命令参数，也不包含漏洞利用功能。
-
-## 漏洞管理模块
-
-漏洞记录维护标题、CVE、描述、严重等级、CVSS、状态、资产和扫描任务来源。支持管理员创建/更新、普通用户查询，以及分页筛选和统计：
-
-- `POST /api/v1/vulnerabilities`
-- `GET /api/v1/vulnerabilities`
-- `GET /api/v1/vulnerabilities/{id}`
-- `PUT /api/v1/vulnerabilities/{id}`
-- `DELETE /api/v1/vulnerabilities/{id}`
-- `GET /api/v1/vulnerabilities/statistics`
-
-扫描完成后会基于已同步的 `cve_intelligence` 情报对发现的产品/版本执行保守匹配，并将可能匹配结果写入漏洞管理；匹配结果需要人工核实，不执行漏洞利用或攻击验证。
-
-## 风险分析模块
-
-风险分数采用可解释公式：
-
-```text
-单漏洞风险分 = 严重度基础分 + CVSS × 3 + 资产重要性 × 2 + 开放服务加分 10
-资产风险分 = 所有关联开放漏洞风险分之和（上限 100）
-```
-
-等级划分：`critical 80—100`、`high 50—79`、`medium 20—49`、`low 0—19`。
-
-接口：`/api/v1/risk/summary`、`/levels`、`/top-assets`、`/trend`。所有接口需要 JWT，普通用户只能查看授权扫描范围。
-
-## 安全增强
-
-- 统一日志输出到控制台和 `logs/security-platform.log`，支持 `LOG_LEVEL` 和轮转文件。
-- 关键认证、资产、扫描和漏洞操作写入审计日志。
-- 管理员可通过 `GET /api/v1/audit/logs` 分页查询审计记录。
-- API 统一处理参数校验、HTTP 异常和未处理异常，不向客户端返回堆栈。
-- JWT 密钥、数据库密码、CORS 来源和日志配置均通过环境变量设置。
-- 登录失败默认 5 次/15 分钟触发临时限制，并记录来源 IP 的安全日志。
-- API 默认按客户端 IP 限制为 300 次/分钟；当前为单进程内存限流，多实例部署应替换为 Redis 等共享存储。
-- 模型时间字段统一使用时区感知 UTC 时间。
-
-## 前端管理后台
-
-前端使用 Vue 3 + Element Plus + TypeScript。启动方式：
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-页面包括登录、风险总览、资产管理、扫描任务、自动化巡检、漏洞管理和审计日志。前端默认通过 `/api/v1` 访问后端，可使用 `VITE_API_BASE_URL` 覆盖 API 地址。
-
-## 自动化巡检
-
-自动化巡检使用 Redis + Celery Worker + Celery Beat。定时任务配置持久化在新增的 `scan_schedules` 表中，Worker 执行授权范围内的 Nmap 服务发现，完成后通过统一结果处理服务保存真实扫描结果、同步资产服务信息并尝试关联 CVE；不虚构 CVE 数据。Redis/Celery 不可用时的同步备用路径也复用同一处理逻辑。
-
-Docker Compose 会启动 `redis`、`celery_worker` 和 `celery_beat`。首次部署需要执行迁移：
-
-```bash
-docker compose -f docker/docker-compose.yml run --rm backend alembic upgrade head
-```
-
-接口：`POST/GET /api/v1/scan-schedules`、`POST /api/v1/scan-schedules/{id}/run`、`DELETE /api/v1/scan-schedules/{id}`。任务状态为 `pending`、`running`、`completed` 或 `failed`。
-
-## CVE 漏洞情报
-
-CVE 情报模块使用 NVD API 2.0 作为主数据源，独立保存于 `cve_intelligence` 表，不修改现有 `vulnerabilities` 表。管理员可调用 `POST /api/v1/cve/sync` 提交增量同步任务，Celery Beat 默认每 6 小时同步最近修改的记录；查询接口为 `GET /api/v1/cve`，支持关键词、等级和分页。服务版本匹配结果仅表示可能匹配，不会自动伪造或确认漏洞。
-
-## 安全报告
-
-安全报告基于当前数据库真实数据生成快照，包含资产、漏洞、风险等级、扫描成功率、风险趋势和整改建议。管理员可通过前端“安全报告”页面生成报告，普通用户仅能查看自己创建的报告。
-
-- `POST /api/v1/reports`：按统计周期生成报告（管理员）
-- `GET /api/v1/reports`：查询报告列表
-- `GET /api/v1/reports/{id}`：查看报告详情
-- `GET /api/v1/reports/{id}/html`：打开 HTML 报告
-- `GET /api/v1/reports/{id}/pdf`：下载 PDF 报告
-
-报告表由 Alembic 迁移 `c3d4e5f6a7b8` 创建。PDF 使用 WeasyPrint 生成；Docker 环境如需 PDF 导出，应安装其系统字体和 Pango/Cairo 运行库。
-
-架构、安全设计、部署、测试和已知限制见 [`docs/public/`](docs/public/) 目录。
-
-演示截图位于 `docs/screenshots/`，测试账号仅用于本地演示，部署前必须修改密码。
+本项目基于 [MIT License](LICENSE) 发布。

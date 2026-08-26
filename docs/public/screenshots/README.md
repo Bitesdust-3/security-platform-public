@@ -1,20 +1,17 @@
-# 项目截图规划
+# 项目截图
 
-本目录只存放真实运行环境截图，不使用模拟图片或设计稿冒充系统截图。
+本目录只保留当前公开版的真实 SecureOps 界面截图与报告展示素材。截图来自隔离 E2E 环境或真实报告生成结果，不包含密码、Token、私有靶机地址、环境变量或个人信息。
 
-## 推荐截图顺序
+当前主要展示素材：
 
-1. `01-login.png`：登录页面，隐藏真实密码和敏感环境信息。
-2. `02-dashboard.png`：安全总览、风险等级分布、趋势和高风险资产。
-3. `03-assets.png`：资产列表、筛选条件和详情抽屉。
-4. `04-vulnerabilities.png`：CVE、CVSS、严重等级和漏洞状态。
-5. `05-audit.png`：审计日志和操作记录。
-6. `06-reports.png`：报告列表、报告详情和导出操作。
+1. `07-demo-login.png`：登录页。
+2. `08-demo-dashboard.png`：风险总览。
+3. `09-demo-assets.png`：资产管理。
+4. `10-demo-scans-pending.png`、`11-demo-scans-running.png`、`12-demo-scans-completed.png`：扫描任务状态流转与结果。
+5. `13-demo-risk-dashboard.png`：风险分析。
+6. `14-demo-vulnerabilities.png`：漏洞管理。
+7. `15-demo-reports.png`：安全报告页。
+8. `16-security-report-cover.png`：当前版本真实数据库快照生成的 PDF 报告封面。
+9. `17-cve-intelligence.png`、`18-audit-log.png`：CVE 情报与审计日志。
 
-当前已生成以上六张真实E2E运行截图，来源为独立 `secureops-e2e` 测试环境；未使用设计稿或模拟图片。
-
-截图前准备：
-
-- 使用本地演示账号，不展示密码、JWT、数据库地址或NVD密钥。
-- 使用明确标注的实验资产，例如 `127.0.0.1`。
-- 在截图中保留 SecureOps Logo 和页面标题，便于产品演示。
+后续替换截图时请使用脱敏演示数据或文档测试网段；不要提交真实内网地址、个人账号或第三方资产信息。
