@@ -154,6 +154,12 @@ def process_scan_results(db, scan_task: ScanTask, discovered: list[DiscoveredSer
         "scan post-process completed scan_id=%s saved_results=%s matched_cves=%s possible_matches=%s created_vulnerabilities=%s",
         scan_task.id, saved_results, matched_cves, possible_matches, created_vulnerabilities,
     )
+    logger.info("scan stage=result_save completed scan_id=%s count=%s", scan_task.id, saved_results)
+    logger.info("scan stage=cve_match completed scan_id=%s candidates=%s possible=%s", scan_task.id, matched_cves, possible_matches)
+    logger.info("scan stage=vulnerability_write completed scan_id=%s created=%s warnings=%s", scan_task.id, created_vulnerabilities, processing_warnings)
+    # Risk endpoints calculate from persisted vulnerabilities and services at
+    # request time, so committing these records is the risk refresh boundary.
+    logger.info("scan stage=risk_refresh completed scan_id=%s mode=dynamic", scan_task.id)
 
     return {
         "discovered_services": len(discovered),
