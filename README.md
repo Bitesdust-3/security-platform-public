@@ -76,22 +76,20 @@ Demo 使用隔离的 E2E 数据与授权测试目标，展示真实前端、API 
 
 ## Screenshots
 
-<p align="center">
-  <img src="docs/public/screenshots/08-demo-dashboard.png" alt="SecureOps Dashboard" width="48%" />
-  <img src="docs/public/screenshots/09-demo-assets.png" alt="SecureOps Asset Management" width="48%" />
-</p>
-<p align="center">
-  <img src="docs/public/screenshots/12-demo-scans-completed.png" alt="SecureOps Scan Results" width="48%" />
-  <img src="docs/public/screenshots/14-demo-vulnerabilities.png" alt="SecureOps Vulnerability Management" width="48%" />
-</p>
-<p align="center">
-  <img src="docs/public/screenshots/17-cve-intelligence.png" alt="SecureOps CVE Intelligence" width="48%" />
-  <img src="docs/public/screenshots/18-audit-log.png" alt="SecureOps Audit Log" width="48%" />
-</p>
-<p align="center">
-  <img src="docs/public/screenshots/13-demo-risk-dashboard.png" alt="SecureOps Risk Analysis" width="48%" />
-  <img src="docs/public/screenshots/16-security-report-cover.png" alt="SecureOps PDF Security Report" width="24%" />
-</p>
+<table>
+  <tr>
+    <td width="50%" valign="top"><strong>安全总览</strong><br /><img src="docs/public/screenshots/08-demo-dashboard.png" alt="SecureOps Dashboard" width="100%" /></td>
+    <td width="50%" valign="top"><strong>资产管理</strong><br /><img src="docs/public/screenshots/09-demo-assets.png" alt="SecureOps Asset Management" width="100%" /></td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top"><strong>扫描任务与结果</strong><br /><img src="docs/public/screenshots/12-demo-scans-completed.png" alt="SecureOps Scan Results" width="100%" /></td>
+    <td width="50%" valign="top"><strong>漏洞管理</strong><br /><img src="docs/public/screenshots/14-demo-vulnerabilities.png" alt="SecureOps Vulnerability Management" width="100%" /></td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top"><strong>CVE 情报</strong><br /><img src="docs/public/screenshots/17-cve-intelligence.png" alt="SecureOps CVE Intelligence" width="100%" /></td>
+    <td width="50%" valign="top"><strong>审计日志</strong><br /><img src="docs/public/screenshots/18-audit-log.png" alt="SecureOps Audit Log" width="100%" /></td>
+  </tr>
+</table>
 
 更多页面截图见 [截图目录](docs/public/screenshots/)。其中 PDF 报告封面来自当前版本使用真实数据库快照生成的报告；展示素材不包含扫描目标、账户密码或环境密钥。
 
@@ -106,6 +104,10 @@ Demo 使用隔离的 E2E 数据与授权测试目标，展示真实前端、API 
 - 基于真实统计自动生成的整改建议
 
 报告中所有统计会随数据库数据变化而更新；空数据会以明确的业务提示展示，而不会伪造数据。
+
+<p align="center">
+  <img src="docs/public/screenshots/16-security-report-cover.png" alt="SecureOps PDF Security Report Cover" width="360" />
+</p>
 
 ## 快速部署
 

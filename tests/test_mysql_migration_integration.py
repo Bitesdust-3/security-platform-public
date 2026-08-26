@@ -1,8 +1,11 @@
 import os
 import subprocess
+import sys
 from pathlib import Path
 
 import pytest
+from alembic.config import Config
+from alembic.script import ScriptDirectory
 from sqlalchemy import create_engine, inspect, text
 
 
@@ -18,10 +21,13 @@ def test_mysql_upgrade_head_creates_complete_schema():
         "ENVIRONMENT": "test",
         "PYTHONPATH": str(backend),
     }
-    subprocess.run(["alembic", "upgrade", "head"], cwd=backend, env=env, check=True)
+    subprocess.run([sys.executable, "-m", "alembic", "upgrade", "head"], cwd=backend, env=env, check=True)
 
     engine = create_engine(database_url, pool_pre_ping=True)
     required = {"users", "assets", "scan_tasks", "scan_results", "vulnerabilities", "cve_intelligence", "scan_schedules", "security_reports", "audit_logs"}
     assert required.issubset(set(inspect(engine).get_table_names()))
+    alembic_config = Config(str(backend / "alembic.ini"))
+    alembic_config.set_main_option("script_location", str(backend / "alembic"))
+    expected_head = ScriptDirectory.from_config(alembic_config).get_current_head()
     with engine.connect() as connection:
-        assert connection.execute(text("SELECT version_num FROM alembic_version")).scalar_one() == "f6b7c8d9e0f1"
+        assert connection.execute(text("SELECT version_num FROM alembic_version")).scalar_one() == expected_head
